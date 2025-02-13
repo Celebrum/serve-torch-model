@@ -33,3 +33,4 @@ Logs for Test B
 - [ ] Have you added tests that prove your fix is effective or that this feature works?
 - [ ] Has code been commented, particularly in hard-to-understand areas?
 - [ ] Have you made corresponding changes to the documentation?
+- [ ] Have you made corresponding changes to the documentation for the `tensorzero` integration?

@@ -86,6 +86,10 @@ include_directories(${GMOCK_INCLUDE_DIRS})
 include_directories("${CMAKE_INSTALL_PREFIX}/_deps")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+# Add tensorzero submodule
+set(TENSORZERO_SRC_DIR "${torchserve_cpp_SOURCE_DIR}/third_party/tensorzero")
+add_subdirectory(${TENSORZERO_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/tensorzero)
+
 # add subdirectories in src
 add_subdirectory(src/utils)
 add_subdirectory(src/backends)

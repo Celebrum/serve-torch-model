@@ -1,7 +1,7 @@
 #include "src/backends/core/backend.hh"
 
 #include <memory>
-
+#include "tensorzero/tensorzero.h"
 #include "src/backends/handler/handler_factory.hh"
 #include "src/utils/logging.hh"
 
