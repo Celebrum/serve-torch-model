@@ -119,8 +119,33 @@ Q: Build on Mac fails with `Library not loaded: @rpath/libomp.dylib`
 A: Install libomp with brew and link in /usr/local/lib
 ```bash
 brew install libomp
-sudo ln -s /opt/homebrew/opt/libomp/lib/libomp.dylib /usr/local/lib/libomp.dylib
+sudo ln -s /opt/homebrew/opt/lib/libomp.dylib /usr/local/lib/libomp.dylib
 ```
 
 Q: When loading a handler which uses a model exported with torch._export.aot_compile the handler dies with "error: Error in dlopen: MODEL.SO : undefined symbol: SOME_SYMBOL".
 A: Make sure that you are using matching libtorch and Pytorch versions for inference and export, respectively.
+
+### Integrating TensorZero Library
+To integrate the `tensorzero` library from `celebrum/tensorzero.git` with this repository, follow these steps:
+
+1. Add `celebrum/tensorzero.git` as a submodule to the repository. Update the `.gitmodules` file to include the new submodule. For example:
+    ```plaintext
+    [submodule "third_party/tensorzero"]
+      path = third_party/tensorzero
+      url = https://github.com/celebrum/tensorzero.git
+    ```
+2. Run the following command to initialize and update the submodule:
+    ```bash
+    git submodule update --init --recursive
+    ```
+3. Update the `CMakeLists.txt` file in the `cpp/src/backends` directory to include the new submodule. Add the following lines to the file:
+    ```plaintext
+    set(TENSORZERO_SRC_DIR "${torchserve_cpp_SOURCE_DIR}/third_party/tensorzero")
+    add_subdirectory(${TENSORZERO_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/tensorzero)
+    ```
+4. Update the `cpp/src/backends/CMakeLists.txt` file to link the `tensorzero` library with the existing libraries. Add the following lines to the file:
+    ```plaintext
+    target_link_libraries(ts_backends_core PUBLIC tensorzero)
+    target_link_libraries(model_worker_socket PRIVATE tensorzero)
+    ```
+5. Update the relevant source files to include and use the `tensorzero` library as needed. For example, you may need to update `cpp/src/backends/core/backend.cc` and `cpp/src/backends/core/backend.hh` to include the necessary headers and use the `tensorzero` library.

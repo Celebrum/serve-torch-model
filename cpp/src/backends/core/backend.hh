@@ -14,6 +14,7 @@
 #include "src/utils/config.hh"
 #include "src/utils/dl_loader.hh"
 #include "src/utils/message.hh"
+#include "tensorzero/tensorzero.h"
 
 namespace torchserve {
 /**

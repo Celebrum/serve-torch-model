@@ -1,0 +1,3 @@
+[submodule "third_party/tensorzero"]
+  path = third_party/tensorzero
+  url = https://github.com/celebrum/tensorzero.git
