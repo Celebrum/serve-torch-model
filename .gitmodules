@@ -1,3 +1,6 @@
 [submodule "third_party/google/rpc"]
 	path = third_party/google/rpc
 	url = https://github.com/googleapis/googleapis.git
+[submodule "third_party/tensorzero"]
+	path = third_party/tensorzero
+	url = https://github.com/Celebrum/tensorzero.git
