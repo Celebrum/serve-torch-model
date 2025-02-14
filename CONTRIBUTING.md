@@ -122,3 +122,106 @@ All of our model optimization work ranging from IPEX to TensorRT work in a simil
 
 ### Something more complicated
 For something more complicated please open an issue and discuss it with the core team, you can see what our general priorities are here https://github.com/pytorch/serve/projects but if you need a feature urgently we are happy to guide you so you can get it done.
+
+### Guidelines for Documenting Changes and Motivations for `tensor zero` Contributions
+
+To document changes in the wiki for `tensor zero` contributions, follow these guidelines:
+
+* Clearly describe the change made, including the motivation behind it.
+* Outline the specific code changes and their reasons.
+* Categorize the changes into relevant sections, such as `serve-torch`, `tensor zero`, and the current repository.
+* Ensure that the documentation is precise and easy to understand.
+* Use the provided templates in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md` for consistency.
+* Update the `CONTRIBUTING.md` file with any new guidelines or requirements for `tensor zero` contributions.
+
+### Using Templates for Consistency
+
+To ensure consistency in documenting changes and motivations, use the templates provided in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md`. These templates help maintain a uniform structure and make it easier for others to understand the changes and their motivations.
+
+### New Guidelines for `tensor zero` Contributions
+
+When contributing to `tensor zero`, follow these new guidelines:
+
+* Use clear and concise language to describe changes and their motivations.
+* Organize the documentation into relevant sections, such as `serve-torch`, `tensor zero`, and the current repository.
+* Use the provided templates in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md` for consistency.
+* Ensure that the documentation is easy to navigate and understand.
+* Include examples and code snippets where necessary to illustrate changes.
+* Regularly review and update the documentation to keep it current and accurate.
+
+### Guidelines for Documenting Changes and Motivations for `serve-torch` Contributions
+
+To document changes in the wiki for `serve-torch` contributions, follow these guidelines:
+
+* Clearly describe the change made, including the motivation behind it.
+* Outline the specific code changes and their reasons.
+* Categorize the changes into relevant sections, such as `serve-torch`, `tensor zero`, and the current repository.
+* Ensure that the documentation is precise and easy to understand.
+* Use the provided templates in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md` for consistency.
+* Update the `CONTRIBUTING.md` file with any new guidelines or requirements for `serve-torch` contributions.
+
+### Guidelines for Categorizing Changes into Relevant Sections
+
+To categorize changes in the wiki, follow these guidelines:
+
+* Organize the documentation into relevant sections, such as `serve-torch`, `tensor zero`, and the current repository.
+* Clearly describe the change made, including the motivation behind it.
+* Outline the specific code changes and their reasons.
+* Ensure that the documentation is precise and easy to understand.
+* Use the provided templates in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md` for consistency.
+* Update the `CONTRIBUTING.md` file with any new guidelines or requirements.
+* Include examples and code snippets where necessary to illustrate changes.
+* Regularly review and update the documentation to keep it current and accurate.
+
+### Guidelines for Using Templates Provided in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md` for Consistency
+
+To ensure consistency in documenting changes and motivations, use the templates provided in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md`. These templates help maintain a uniform structure and make it easier for others to understand the changes and their motivations.
+
+### Guidelines for Updating the `CONTRIBUTING.md` File with Any New Guidelines or Requirements
+
+To keep the `CONTRIBUTING.md` file current and accurate, follow these guidelines:
+
+* Regularly review and update the `CONTRIBUTING.md` file with any new guidelines or requirements.
+* Ensure that the documentation is precise and easy to understand.
+* Use clear and concise language to describe changes and their motivations.
+* Organize the documentation into relevant sections, such as `serve-torch`, `tensor zero`, and the current repository.
+* Include examples and code snippets where necessary to illustrate changes.
+
+### Guidelines for Ensuring that the Documentation is Precise and Easy to Understand
+
+To ensure that the documentation is precise and easy to understand, follow these guidelines:
+
+* Use clear and concise language to describe changes and their motivations.
+* Organize the documentation into relevant sections, such as `serve-torch`, `tensor zero`, and the current repository.
+* Use the provided templates in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md` for consistency.
+* Update the `CONTRIBUTING.md` file with any new guidelines or requirements.
+* Ensure that the documentation is easy to navigate and understand.
+* Use bullet points, headings, and subheadings to break down complex information.
+* Include examples and code snippets where necessary to illustrate changes.
+* Regularly review and update the documentation to keep it current and accurate.
+
+### Guidelines for Including Examples and Code Snippets Where Necessary to Illustrate Changes
+
+To include examples and code snippets where necessary to illustrate changes, follow these guidelines:
+
+* Use clear and concise language to describe changes and their motivations.
+* Organize the documentation into relevant sections, such as `serve-torch`, `tensor zero`, and the current repository.
+* Use the provided templates in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md` for consistency.
+* Update the `CONTRIBUTING.md` file with any new guidelines or requirements.
+* Ensure that the documentation is easy to navigate and understand.
+* Use bullet points, headings, and subheadings to break down complex information.
+* Include examples and code snippets where necessary to illustrate changes.
+* Regularly review and update the documentation to keep it current and accurate.
+
+### Guidelines for Regularly Reviewing and Updating the Documentation to Keep it Current and Accurate
+
+To regularly review and update the documentation to keep it current and accurate, follow these guidelines:
+
+* Use clear and concise language to describe changes and their motivations.
+* Organize the documentation into relevant sections, such as `serve-torch`, `tensor zero`, and the current repository.
+* Use the provided templates in `.github/ISSUE_TEMPLATE` and `.github/pull_request_template.md` for consistency.
+* Update the `CONTRIBUTING.md` file with any new guidelines or requirements.
+* Ensure that the documentation is easy to navigate and understand.
+* Use bullet points, headings, and subheadings to break down complex information.
+* Include examples and code snippets where necessary to illustrate changes.
+* Regularly review and update the documentation to keep it current and accurate.
