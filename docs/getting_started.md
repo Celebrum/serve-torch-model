@@ -180,26 +180,35 @@ If you plan to develop with TorchServe and change some source code, follow the [
 
 ### Integrating TensorZero Library
 
-To integrate the `tensorzero` library from `celebrum/tensorzero.git` with this repository, follow these steps:
+To integrate and use models from TensorZero with TorchServe, follow these steps:
 
-1. Add `celebrum/tensorzero.git` as a submodule to the repository. Update the `.gitmodules` file to include the new submodule. For example:
-    ```plaintext
-    [submodule "third_party/tensorzero"]
-      path = third_party/tensorzero
-      url = https://github.com/celebrum/tensorzero.git
-    ```
-2. Run the following command to initialize and update the submodule:
-    ```bash
-    git submodule update --init --recursive
-    ```
-3. Update the `CMakeLists.txt` file in the `cpp/src/backends` directory to include the new submodule. Add the following lines to the file:
-    ```plaintext
-    set(TENSORZERO_SRC_DIR "${torchserve_cpp_SOURCE_DIR}/third_party/tensorzero")
-    add_subdirectory(${TENSORZERO_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/tensorzero)
-    ```
-4. Update the `cpp/src/backends/CMakeLists.txt` file to link the `tensorzero` library with the existing libraries. Add the following lines to the file:
-    ```plaintext
-    target_link_libraries(ts_backends_core PUBLIC tensorzero)
-    target_link_libraries(model_worker_socket PRIVATE tensorzero)
-    ```
-5. Update the relevant source files to include and use the `tensorzero` library as needed. For example, you may need to update `cpp/src/backends/core/backend.cc` and `cpp/src/backends/core/backend.hh` to include the necessary headers and use the `tensorzero` library.
+1. Make sure TensorZero is properly set up as a submodule:
+   ```bash
+   git submodule update --init --recursive
+   ```
+
+2. Build TensorZero from the submodule:
+   ```bash
+   cd third_party/tensorzero
+   cargo build --release
+   cd ../..
+   ```
+
+3. In your model archive's `handler.py`, specify the handler type as "tensorzero":
+   ```python
+   manifest = {
+       "handler": "tensorzero"
+   }
+   ```
+
+4. When creating your model archive, include your TensorZero model file:
+   ```bash
+   torch-model-archiver --model-name my_model --version 1.0 --handler tensorzero --export-path model_store
+   ```
+
+5. Start TorchServe as usual:
+   ```bash
+   torchserve --start --model-store model_store --models my_model.mar
+   ```
+
+The TensorZero handler will automatically handle model loading, inference preprocessing and postprocessing.
