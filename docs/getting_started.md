@@ -4,40 +4,42 @@
 
 1. Install dependencies
 
-    Note: For Conda, Python >=3.8 is required to run Torchserve.
+   Note: For Conda, Python >=3.8 is required to run Torchserve.
 
-    #### For Debian Based Systems/ MacOS
+   #### For Debian Based Systems/ MacOS
 
-     - For CPU
+   - For CPU
 
-        ```bash
-        python ./ts_scripts/install_dependencies.py
-        ```
+     ```bash
+     python ./ts_scripts/install_dependencies.py
+     ```
 
-     - For GPU with Cuda 12.1. Options are `cu92`, `cu101`, `cu102`, `cu111`, `cu113`, `cu116`, `cu117`, `cu118`, `cu121`
+   - For GPU with Cuda 12.1. Options are `cu92`, `cu101`, `cu102`, `cu111`, `cu113`, `cu116`, `cu117`, `cu118`, `cu121`
 
-       ```bash
-       python ./ts_scripts/install_dependencies.py --cuda=cu121
-       ```
+     ```bash
+     python ./ts_scripts/install_dependencies.py --cuda=cu121
+     ```
 
-     Note: PyTorch 1.9+ will not support cu92 and cu101. So TorchServe only supports cu92 and cu101 up to PyTorch 1.8.1.
+   Note: PyTorch 1.9+ will not support cu92 and cu101. So TorchServe only supports cu92 and cu101 up to PyTorch 1.8.1.
 
-    #### For Windows
+   #### For Windows
 
-    Refer to the documentation [here](./torchserve_on_win_native.md).
+   Refer to the documentation [here](./torchserve_on_win_native.md).
 
 2. Install torchserve, torch-model-archiver and torch-workflow-archiver
 
-    For [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install)
-    Note: Conda packages are not supported for Windows. Refer to the documentation [here](./torchserve_on_win_native.md).
-    ```
-    conda install torchserve torch-model-archiver torch-workflow-archiver -c pytorch
-    ```
+   For [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install)
+   Note: Conda packages are not supported for Windows. Refer to the documentation [here](./torchserve_on_win_native.md).
 
-    For Pip
-    ```
-    pip install torchserve torch-model-archiver torch-workflow-archiver
-    ```
+   ```
+   conda install torchserve torch-model-archiver torch-workflow-archiver -c pytorch
+   ```
+
+   For Pip
+
+   ```
+   pip install torchserve torch-model-archiver torch-workflow-archiver
+   ```
 
 Now you are ready to [package and serve models with TorchServe](#serve-a-model).
 
@@ -61,21 +63,21 @@ You can also create model stores to store your archived models.
 
 1. Create a directory to store your models.
 
-    ```bash
-    mkdir model_store
-    ```
+   ```bash
+   mkdir model_store
+   ```
 
 1. Download a trained model.
 
-    ```bash
-    wget https://download.pytorch.org/models/densenet161-8d451a50.pth
-    ```
+   ```bash
+   wget https://download.pytorch.org/models/densenet161-8d451a50.pth
+   ```
 
 1. Archive the model by using the model archiver. The `extra-files` param uses a file from the `TorchServe` repo, so update the path if necessary.
 
-    ```bash
-    torch-model-archiver --model-name densenet161 --version 1.0 --model-file ./serve/examples/image_classifier/densenet_161/model.py --serialized-file densenet161-8d451a50.pth --export-path model_store --extra-files ./serve/examples/image_classifier/index_to_name.json --handler image_classifier
-    ```
+   ```bash
+   torch-model-archiver --model-name densenet161 --version 1.0 --model-file ./serve/examples/image_classifier/densenet_161/model.py --serialized-file densenet161-8d451a50.pth --export-path model_store --extra-files ./serve/examples/image_classifier/index_to_name.json --handler image_classifier
+   ```
 
 For more information about the model archiver, see [Torch Model archiver for TorchServe](https://github.com/pytorch/serve/tree/master/model-archiver/README.md)
 
@@ -97,19 +99,19 @@ To test the model server, send a request to the server's `predictions` API. Torc
 
 #### Using GRPC APIs through python client
 
- - Install grpc python dependencies :
+- Install grpc python dependencies :
 
 ```bash
 pip install -U grpcio protobuf grpcio-tools
 ```
 
- - Generate inference client using proto files
+- Generate inference client using proto files
 
 ```bash
 python -m grpc_tools.protoc --proto_path=frontend/server/src/main/resources/proto/ --python_out=ts_scripts --grpc_python_out=ts_scripts frontend/server/src/main/resources/proto/inference.proto frontend/server/src/main/resources/proto/management.proto
 ```
 
- - Run inference using a sample client [gRPC python client](https://github.com/pytorch/serve/blob/master/ts_scripts/torchserve_grpc_client.py)
+- Run inference using a sample client [gRPC python client](https://github.com/pytorch/serve/blob/master/ts_scripts/torchserve_grpc_client.py)
 
 ```bash
 python ts_scripts/torchserve_grpc_client.py infer densenet161 examples/image_classifier/kitten.jpg
@@ -166,6 +168,7 @@ torchserve --stop
 ```
 
 ### Inspect the logs
+
 All the logs you've seen as output to stdout related to model registration, management, inference are recorded in the `/logs` folder.
 
 High level performance data like Throughput or Percentile Precision can be generated with [Benchmark](https://github.com/pytorch/serve/tree/master/benchmarks/README.md) and visualized in a report.
@@ -183,11 +186,13 @@ If you plan to develop with TorchServe and change some source code, follow the [
 To integrate and use models from TensorZero with TorchServe, follow these steps:
 
 1. Make sure TensorZero is properly set up as a submodule:
+
    ```bash
    git submodule update --init --recursive
    ```
 
 2. Build TensorZero from the submodule:
+
    ```bash
    cd third_party/tensorzero
    cargo build --release
@@ -195,6 +200,7 @@ To integrate and use models from TensorZero with TorchServe, follow these steps:
    ```
 
 3. In your model archive's `handler.py`, specify the handler type as "tensorzero":
+
    ```python
    manifest = {
        "handler": "tensorzero"
@@ -202,6 +208,7 @@ To integrate and use models from TensorZero with TorchServe, follow these steps:
    ```
 
 4. When creating your model archive, include your TensorZero model file:
+
    ```bash
    torch-model-archiver --model-name my_model --version 1.0 --handler tensorzero --export-path model_store
    ```
