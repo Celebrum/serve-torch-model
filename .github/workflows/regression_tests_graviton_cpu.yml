@@ -1,6 +1,7 @@
-name: Run Regression Tests on CPU for Graviton
+name: CI CPU
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -14,28 +15,65 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  regression-cpu:
-    runs-on: [self-hosted, graviton-test]
+  ci-cpu:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, macos-latest]
+
     steps:
-      - name: Setup Python
+      - name: Setup Python for M1
+        if: matrix.os == 'macos-latest'
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
           architecture: arm64
+
+      - name: Setup Python for all other OS
+        if: matrix.os != 'macos-latest'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          architecture: x64
+
       - name: Setup Java 17
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '17'
+
       - name: Checkout TorchServe
         uses: actions/checkout@v3
         with:
           submodules: recursive
+
       - name: Install dependencies
         run: |
           python ts_scripts/install_dependencies.py --environment=dev
-      - name: Torchserve Regression Tests
-        env:
-          TS_MAC_ARM64_CPU_ONLY: 'True'
+
+      - name: Torchserve Sanity
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_on: error
+          command: |
+            python torchserve/scripts/sanity_test.py
+
+      - name: Upload codecov
+        if: matrix.os == 'ubuntu-20.04'
         run: |
-          python test/regression_tests.py
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov
+
+      - name: Install numactl on Linux
+        if: matrix.os == 'ubuntu-20.04'
+        run: |
+          sudo apt-get update && sudo apt-get install -y numactl
+
+      - name: Skip numactl on macOS
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo "numactl is not available on macOS, skipping."
