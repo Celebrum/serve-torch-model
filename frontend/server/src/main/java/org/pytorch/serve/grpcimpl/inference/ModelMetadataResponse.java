@@ -64,7 +64,7 @@ public class ModelMetadataResponse {
     }
 
     public ModelMetadataResponse(String name, List<String> versions, String platform,
-                               List<TensorMetadata> inputs, List<TensorMetadata> outputs) {
+            List<TensorMetadata> inputs, List<TensorMetadata> outputs) {
         this.name = name;
         this.versions = versions;
         this.platform = platform;
