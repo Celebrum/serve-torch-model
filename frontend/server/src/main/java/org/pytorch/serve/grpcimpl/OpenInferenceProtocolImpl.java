@@ -14,19 +14,18 @@ import java.util.Map;
 import java.util.UUID;
 import org.pytorch.serve.archive.model.ModelNotFoundException;
 import org.pytorch.serve.archive.model.ModelVersionNotFoundException;
-import org.pytorch.serve.grpc.openinference.GRPCInferenceServiceGrpc.GRPCInferenceServiceImplBase;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ModelInferRequest;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ModelInferRequest.InferInputTensor;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ModelInferResponse;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ModelMetadataRequest;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ModelMetadataResponse;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ModelMetadataResponse.TensorMetadata;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ModelReadyRequest;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ModelReadyResponse;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ServerLiveRequest;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ServerLiveResponse;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ServerReadyRequest;
-import org.pytorch.serve.grpc.openinference.OpenInferenceGrpc.ServerReadyResponse;
+import org.pytorch.serve.grpcimpl.inference.ModelInferRequest;
+import org.pytorch.serve.grpcimpl.inference.ModelInferRequest.InferInputTensor;
+import org.pytorch.serve.grpcimpl.inference.ModelInferResponse;
+import org.pytorch.serve.grpcimpl.inference.ModelMetadataRequest;
+import org.pytorch.serve.grpcimpl.inference.ModelMetadataResponse;
+import org.pytorch.serve.grpcimpl.inference.ModelMetadataResponse.TensorMetadata;
+import org.pytorch.serve.grpcimpl.inference.ModelReadyRequest;
+import org.pytorch.serve.grpcimpl.inference.ModelReadyResponse;
+import org.pytorch.serve.grpcimpl.inference.ServerLiveRequest;
+import org.pytorch.serve.grpcimpl.inference.ServerLiveResponse;
+import org.pytorch.serve.grpcimpl.inference.ServerReadyRequest;
+import org.pytorch.serve.grpcimpl.inference.ServerReadyResponse;
 import org.pytorch.serve.http.BadRequestException;
 import org.pytorch.serve.http.InternalServerException;
 import org.pytorch.serve.job.GRPCJob;
@@ -40,7 +39,7 @@ import org.pytorch.serve.wlm.ModelManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OpenInferenceProtocolImpl extends GRPCInferenceServiceImplBase {
+public class OpenInferenceProtocolImpl extends InferenceServiceImpl {
     private static final Logger logger = LoggerFactory.getLogger(OpenInferenceProtocolImpl.class);
 
     @Override
@@ -165,20 +164,6 @@ public class OpenInferenceProtocolImpl extends GRPCInferenceServiceImplBase {
 
         try {
             Model model = modelManager.getModel(modelName, modelVersion);
-            if (model == null) {
-                throw new ModelNotFoundException("Model not found: " + modelName);
-            }
-            modelManager
-                    .getAllModelVersions(modelName)
-                    .forEach(entry -> versions.add(entry.getKey()));
-            response.setName(modelName);
-            response.addAllVersions(versions);
-            response.setPlatform("");
-            response.addAllInputs(inputs);
-            response.addAllOutputs(outputs);
-            responseObserver.onNext(response.build());
-            responseObserver.onCompleted();
-
         } catch (ModelVersionNotFoundException | ModelNotFoundException e) {
             sendErrorResponse(responseObserver, Status.NOT_FOUND, e, null);
         }
