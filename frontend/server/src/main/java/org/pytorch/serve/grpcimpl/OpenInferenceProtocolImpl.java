@@ -123,8 +123,7 @@ public class OpenInferenceProtocolImpl extends InferenceServiceImpl {
             int numHealthy = modelManager.getNumHealthyWorkers(model.getModelVersionName());
             isModelReady = numHealthy >= numScaled;
 
-            ModelReadyResponse modelReadyResponse =
-                    ModelReadyResponse.newBuilder().setReady(isModelReady).build();
+            ModelReadyResponse modelReadyResponse = ModelReadyResponse.newBuilder().setReady(isModelReady).build();
             responseObserver.onNext(modelReadyResponse);
             responseObserver.onCompleted();
 
@@ -164,6 +163,20 @@ public class OpenInferenceProtocolImpl extends InferenceServiceImpl {
 
         try {
             Model model = modelManager.getModel(modelName, modelVersion);
+            if (model == null) {
+                throw new ModelNotFoundException("Model not found: " + modelName);
+            }
+            modelManager
+                    .getAllModelVersions(modelName)
+                    .forEach(entry -> versions.add(entry.getKey()));
+            response.setName(modelName);
+            response.addAllVersions(versions);
+            response.setPlatform("");
+            response.addAllInputs(inputs);
+            response.addAllOutputs(outputs);
+            responseObserver.onNext(response.build());
+            responseObserver.onCompleted();
+
         } catch (ModelVersionNotFoundException | ModelNotFoundException e) {
             sendErrorResponse(responseObserver, Status.NOT_FOUND, e, null);
         }
@@ -220,17 +233,15 @@ public class OpenInferenceProtocolImpl extends InferenceServiceImpl {
         try {
             ModelManager modelManager = ModelManager.getInstance();
             inputData.addParameter(new InputParameter("body", byteArray, contentsType));
-            Job job =
-                    new GRPCJob(
-                            responseObserver,
-                            modelName,
-                            modelVersion,
-                            inputData,
-                            WorkerCommands.OIPPREDICT);
+            Job job = new GRPCJob(
+                    responseObserver,
+                    modelName,
+                    modelVersion,
+                    inputData,
+                    WorkerCommands.OIPPREDICT);
 
             if (!modelManager.addJob(job)) {
-                String responseMessage =
-                        ApiUtils.getStreamingInferenceErrorResponseMessage(modelName, modelVersion);
+                String responseMessage = ApiUtils.getStreamingInferenceErrorResponseMessage(modelName, modelVersion);
                 InternalServerException e = new InternalServerException(responseMessage);
                 sendErrorResponse(
                         responseObserver, Status.INTERNAL, e, "InternalServerException.()");
@@ -244,12 +255,10 @@ public class OpenInferenceProtocolImpl extends InferenceServiceImpl {
             InferInputTensor inferInputTensor, Map<String, Object> inferInputMap) {
         switch (inferInputTensor.getDatatype()) {
             case "BYTES":
-                List<ByteString> byteStrings =
-                        inferInputTensor.getContents().getBytesContentsList();
+                List<ByteString> byteStrings = inferInputTensor.getContents().getBytesContentsList();
                 List<String> base64Strings = new ArrayList<>();
                 for (ByteString byteString : byteStrings) {
-                    String base64String =
-                            Base64.getEncoder().encodeToString(byteString.toByteArray());
+                    String base64String = Base64.getEncoder().encodeToString(byteString.toByteArray());
                     base64Strings.add(base64String);
                 }
                 inferInputMap.put("data", base64Strings);
