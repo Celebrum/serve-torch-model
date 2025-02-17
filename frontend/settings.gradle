@@ -1,2 +1,3 @@
-include 'server',
-	'archive'
+rootProject.name = 'frontend'
+include 'server'
+include 'archive'

@@ -16,7 +16,6 @@ concurrency:
 
 jobs:
   regression-gpu:
-    # creates workflows on self hosted runner
     runs-on: [self-hosted, regression-test-gpu]
     steps:
       - name: Clean up previous run
@@ -26,28 +25,32 @@ jobs:
           sudo rm -rf ./* || true
           sudo rm -rf ./.??* || true
           ls -la ./
-      - name: Update git
-        run: sudo add-apt-repository ppa:git-core/ppa -y && sudo apt-get update && sudo apt-get install git -y
-      - name: Check git version
-        run: git --version
+
       - name: Setup Python 3.9
         uses: actions/setup-python@v5
         with:
           python-version: 3.9
           architecture: x64
+
       - name: Setup Java 17
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: "zulu"
+          java-version: "17"
+
       - name: Checkout TorchServe
         uses: actions/checkout@v3
         with:
           submodules: recursive
+
       - name: Install dependencies
         run: |
           python ts_scripts/install_dependencies.py --environment=dev --cuda=cu121
-      - name: Torchserve Regression Tests
+          python ts_scripts.install_from_src.py
+
+      - name: Run regression suite
+        env:
+          TS_CUDA_VERSION: "cu121"
+          TS_RUN_IN_DOCKER: False
         run: |
-          export TS_RUN_IN_DOCKER=False
           python test/regression_tests.py
