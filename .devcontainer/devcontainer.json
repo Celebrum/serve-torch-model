@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "build": "python ./ts_scripts/install_dependencies.py --environment=dev && python ./ts_scripts/install_from_src.py --environment=dev"
+  }
+}
