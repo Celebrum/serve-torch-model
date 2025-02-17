@@ -78,6 +78,7 @@ protobuf {
 
 processResources.dependsOn('generateProto')
 processTestResources.dependsOn('generateTestProto')
+jar.dependsOn(':frontend:archive:jar')  // Fix the dependency path
 jar.dependsOn(':archive:jar')
 
 apply from: file("${project.rootProject.projectDir}/tools/gradle/proto.gradle")

@@ -1,2 +1,3 @@
-rootProject.name = 'torchserve-frontend'
+rootProject.name = 'frontend'
 include 'server'
+include 'archive'
